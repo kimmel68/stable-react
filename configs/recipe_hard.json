@@ -1,0 +1,57 @@
+{
+ "beschreibung": "Hard: blur and melt on every hit",
+ "audio": {
+  "basis_fps": 30,
+  "offset": 0.0,
+  "bindungen": {
+   "denoise": {
+    "quelle": "onset",
+    "min": 0.4,
+    "max": 0.62,
+    "schwelle": 0.3,
+    "release": 4
+   },
+   "quellzoom": {
+    "quelle": "beat",
+    "min": 1.001,
+    "max": 1.012,
+    "release": 3
+   },
+   "weich": {
+    "quelle": "onset",
+    "min": 0.0,
+    "max": 3.0,
+    "schwelle": 0.3,
+    "release": 3
+   },
+   "control_strength": {
+    "quelle": "takt",
+    "min": 1.0,
+    "max": 0.55,
+    "release": 8
+   },
+   "noise": {
+    "quelle": "hoehen",
+    "min": 0.0,
+    "max": 0.04,
+    "release": 2
+   },
+   "cfg": {
+    "quelle": "huelle",
+    "min": 7.0,
+    "max": 11.0,
+    "glatt": 3
+   },
+   "gedaechtnis": {
+    "quelle": "huelle",
+    "min": 0.8,
+    "max": 0.55,
+    "glatt": 2
+   }
+  },
+  "takt_sample": {
+   "quelle": "beat",
+   "schwelle": 0.5
+  }
+ }
+}

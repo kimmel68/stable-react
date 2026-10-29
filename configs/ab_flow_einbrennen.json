@@ -1,0 +1,15 @@
+{
+  "hinweis": "A/B gegen das Einbrennen im Flow-Modus (Kreuzgang, stride 4, 30 Frames). Basis flow_s4 = fixer Seed, hf 0.6, Farbabgleich auf Quelle. Geprüft wird je ein Faktor und die Kombination.",
+  "runs": [
+    {"name": "fix_hf0_gen0",  "method": "a", "motion": "flow", "zoom": "0:(1.0)", "stride": 4, "controlnet": "depth", "control_strength": 0.8, "alpha": 0.2, "denoise": 0.5, "hf": 0.0, "seed_mode": "fixed", "color_match": "gen0",
+     "prompt": "ancient stone colonnade, volumetric light, moss and gold leaf, painterly, highly detailed"},
+    {"name": "iter_hf0_gen0", "method": "a", "motion": "flow", "zoom": "0:(1.0)", "stride": 4, "controlnet": "depth", "control_strength": 0.8, "alpha": 0.2, "denoise": 0.5, "hf": 0.0, "seed_mode": "iter", "color_match": "gen0",
+     "prompt": "ancient stone colonnade, volumetric light, moss and gold leaf, painterly, highly detailed"},
+    {"name": "iter_hf0_gen0_d40", "method": "a", "motion": "flow", "zoom": "0:(1.0)", "stride": 4, "controlnet": "depth", "control_strength": 0.8, "alpha": 0.2, "denoise": 0.4, "hf": 0.0, "seed_mode": "iter", "color_match": "gen0",
+     "prompt": "ancient stone colonnade, volumetric light, moss and gold leaf, painterly, highly detailed"},
+    {"name": "iter_hf0_gen0_a05", "method": "a", "motion": "flow", "zoom": "0:(1.0)", "stride": 4, "controlnet": "depth", "control_strength": 0.8, "alpha": 0.05, "denoise": 0.45, "hf": 0.0, "seed_mode": "iter", "color_match": "gen0",
+     "prompt": "ancient stone colonnade, volumetric light, moss and gold leaf, painterly, highly detailed"},
+    {"name": "iter_hf6_input", "method": "a", "motion": "flow", "zoom": "0:(1.0)", "stride": 4, "controlnet": "depth", "control_strength": 0.8, "alpha": 0.2, "denoise": 0.5, "hf": 0.6, "seed_mode": "iter", "color_match": "input",
+     "prompt": "ancient stone colonnade, volumetric light, moss and gold leaf, painterly, highly detailed"}
+  ]
+}

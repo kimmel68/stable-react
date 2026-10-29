@@ -1,0 +1,16 @@
+{
+  "hinweis": "Deforum-Referenz nachbauen: Feedback-Loop mit Zoom, Prompt-Fahrplan, kaum Quellanteil. Zielwerte: ssim_prev 0.5-0.7, flow 1.5-3 px, jerk < 0.15. Quelle Kreuzgang liefert nur Startbild und (optional) Tiefe. 120 Frames.",
+  "fahrplan": "0: ancient stone colonnade, volumetric light, moss and gold leaf, painterly, highly detailed | 40: colonnade of bone and coral, bioluminescent, deep sea, painterly | 80: corridor of a derelict space station, hexagonal panels, orange emergency lights, sci-fi illustration",
+  "runs": [
+    {"name": "klassisch_d35", "method": "a", "alpha": 0.05, "hf": 0.0, "denoise": 0.35, "cfg": 7.0, "seed_mode": "fixed", "zoom": "0:(1.02)", "color_match": "first",
+     "prompt": "0: ancient stone colonnade, volumetric light, moss and gold leaf, painterly, highly detailed | 40: colonnade of bone and coral, bioluminescent, deep sea, painterly | 80: corridor of a derelict space station, hexagonal panels, orange emergency lights, sci-fi illustration"},
+    {"name": "klassisch_d45", "method": "a", "alpha": 0.05, "hf": 0.0, "denoise": 0.45, "cfg": 7.0, "seed_mode": "fixed", "zoom": "0:(1.02)", "color_match": "first",
+     "prompt": "0: ancient stone colonnade, volumetric light, moss and gold leaf, painterly, highly detailed | 40: colonnade of bone and coral, bioluminescent, deep sea, painterly | 80: corridor of a derelict space station, hexagonal panels, orange emergency lights, sci-fi illustration"},
+    {"name": "klassisch_iter", "method": "a", "alpha": 0.05, "hf": 0.0, "denoise": 0.45, "cfg": 7.0, "seed_mode": "iter", "zoom": "0:(1.02)", "color_match": "first",
+     "prompt": "0: ancient stone colonnade, volumetric light, moss and gold leaf, painterly, highly detailed | 40: colonnade of bone and coral, bioluminescent, deep sea, painterly | 80: corridor of a derelict space station, hexagonal panels, orange emergency lights, sci-fi illustration"},
+    {"name": "klassisch_tiefe40", "method": "a", "alpha": 0.05, "hf": 0.0, "denoise": 0.45, "cfg": 7.0, "seed_mode": "fixed", "zoom": "0:(1.02)", "color_match": "first", "controlnet": "depth", "control_strength": 0.4, "parallax": 0.6,
+     "prompt": "0: ancient stone colonnade, volumetric light, moss and gold leaf, painterly, highly detailed | 40: colonnade of bone and coral, bioluminescent, deep sea, painterly | 80: corridor of a derelict space station, hexagonal panels, orange emergency lights, sci-fi illustration"},
+    {"name": "quelle_tiefe80", "method": "a", "alpha": 0.3, "hf": 0.6, "denoise": 0.45, "cfg": 7.0, "seed_mode": "fixed", "zoom": "0:(1.02)", "stride": 3, "controlnet": "depth", "control_strength": 0.8, "parallax": 0.6,
+     "prompt": "0: ancient stone colonnade, volumetric light, moss and gold leaf, painterly, highly detailed | 40: colonnade of bone and coral, bioluminescent, deep sea, painterly | 80: corridor of a derelict space station, hexagonal panels, orange emergency lights, sci-fi illustration"}
+  ]
+}

@@ -1,0 +1,14 @@
+# dmk – Python 3.12. PyTorch with CUDA: install torch/torchvision from https://pytorch.org for your CUDA version first.
+numpy>=2.0
+opencv-python>=4.10
+torch>=2.4
+torchvision>=0.19
+transformers>=4.45
+safetensors>=0.4
+pillow>=10
+psutil>=5.9         # RAM guard
+OpenEXR>=3.3        # only for Blender multi-part EXR passes
+# Comfy Developer Platform (self-hosted) and the app
+comfy-sdk==0.5.0
+comfy-api-proxy==0.1.6
+gradio==6.30.0

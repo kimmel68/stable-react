@@ -1,0 +1,106 @@
+{
+ "1": {
+  "class_type": "LoadAudio",
+  "inputs": {
+   "audio": "signal_decay_20s.m4a"
+  }
+ },
+ "2": {
+  "class_type": "DMKAudioBeats",
+  "inputs": {
+   "fps": 30.0,
+   "frames": 0,
+   "offset_s": 0.0,
+   "beat_grid": false,
+   "bpm_min": 60.0,
+   "bpm_max": 140.0,
+   "audio": [
+    "1",
+    0
+   ]
+  }
+ },
+ "3": {
+  "class_type": "DMKBeatGrammar",
+  "inputs": {
+   "grammar": "{\n \"zoom\": [\n  {\n   \"quelle\": \"beat\",\n   \"min\": 1.002,\n   \"max\": 1.008,\n   \"attack\": 3,\n   \"release\": 5\n  },\n  {\n   \"quelle\": \"count1\",\n   \"min\": 1.002,\n   \"max\": 1.016,\n   \"attack\": 3,\n   \"release\": 5\n  }\n ],\n \"denoise\": [\n  {\n   \"quelle\": \"onset\",\n   \"min\": 0.4,\n   \"max\": 0.52,\n   \"schwelle\": 0.3,\n   \"release\": 4\n  },\n  {\n   \"quelle\": \"count4\",\n   \"min\": 0.4,\n   \"max\": 0.62,\n   \"release\": 5\n  }\n ],\n \"blur\": {\n  \"quelle\": \"count2\",\n  \"min\": 0.0,\n  \"max\": 3.75,\n  \"release\": 1\n },\n \"source_pull\": {\n  \"quelle\": \"count3\",\n  \"min\": 0.05,\n  \"max\": 0.6,\n  \"release\": 3\n },\n \"memory\": {\n  \"quelle\": \"bar_phase\",\n  \"min\": 0.375,\n  \"max\": 0.85,\n  \"kurve\": 0.7\n },\n \"cfg\": {\n  \"quelle\": \"envelope\",\n  \"min\": 8.0,\n  \"max\": 11.0,\n  \"glatt\": 3,\n  \"lokal\": true\n }\n}",
+   "beats": [
+    "2",
+    0
+   ]
+  }
+ },
+ "4": {
+  "class_type": "DMKPlotCurves",
+  "inputs": {
+   "beats": [
+    "2",
+    0
+   ],
+   "curves": [
+    "3",
+    0
+   ]
+  }
+ },
+ "5": {
+  "class_type": "PreviewImage",
+  "inputs": {
+   "images": [
+    "4",
+    0
+   ]
+  }
+ },
+ "6": {
+  "class_type": "DMKCurveSchedule",
+  "inputs": {
+   "parameter": "zoom",
+   "frame": 0,
+   "decimals": 4,
+   "curves": [
+    "3",
+    0
+   ]
+  }
+ },
+ "7": {
+  "class_type": "PreviewAny",
+  "inputs": {
+   "source": [
+    "6",
+    0
+   ]
+  }
+ },
+ "8": {
+  "class_type": "DMKBarPrompts",
+  "inputs": {
+   "prompts": "brutalist concrete cathedral, raw board-formed concrete, deep coffered ceiling\ncopperplate engraving of a vast basilica interior, cross-hatched arcades\ncathedral of fungal mycelium, hyphae ribbed vaults, soft bioluminescence",
+   "every_bars": 2,
+   "frame": 0,
+   "beats": [
+    "2",
+    0
+   ]
+  }
+ },
+ "9": {
+  "class_type": "PreviewAny",
+  "inputs": {
+   "source": [
+    "8",
+    0
+   ]
+  }
+ },
+ "10": {
+  "class_type": "PreviewAny",
+  "inputs": {
+   "source": [
+    "2",
+    1
+   ]
+  }
+ }
+}

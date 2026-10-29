@@ -1,0 +1,106 @@
+{
+ "_comment": "Portable 4/4 beat recipe (same as the app's default). 'datei' is relative to the repo root.",
+ "audio": {
+  "datei": "examples/signal_decay_20s.m4a",
+  "basis_fps": 30,
+  "offset": 0.0,
+  "bindungen": {
+   "quellzoom": [
+    {
+     "quelle": "beat",
+     "min": 1.001,
+     "max": 1.006,
+     "release": 5,
+     "attack": 2
+    },
+    {
+     "quelle": "takt",
+     "min": 1.001,
+     "max": 1.012,
+     "release": 5,
+     "attack": 2
+    }
+   ],
+   "control_strength": {
+    "quelle": "takt",
+    "min": 1.0,
+    "max": 0.6,
+    "release": 8
+   },
+   "weich": {
+    "quelle": "takt2",
+    "min": 0.0,
+    "max": 3.75,
+    "release": 1,
+    "attack": 0
+   },
+   "alpha": [
+    {
+     "quelle": "takt3",
+     "min": 0.05,
+     "max": 0.6,
+     "release": 3
+    },
+    {
+     "quelle": "hoehen",
+     "min": 0.05,
+     "max": 0.2,
+     "release": 2
+    }
+   ],
+   "denoise": [
+    {
+     "quelle": "onset",
+     "min": 0.4,
+     "max": 0.52,
+     "schwelle": 0.3,
+     "release": 4
+    },
+    {
+     "quelle": "takt4",
+     "min": 0.4,
+     "max": 0.62,
+     "release": 5
+    }
+   ],
+   "noise": {
+    "quelle": "takt4",
+    "min": 0.0,
+    "max": 0.05,
+    "release": 3
+   },
+   "gedaechtnis": [
+    {
+     "quelle": "takt_phase",
+     "min": 0.375,
+     "max": 0.85,
+     "kurve": 0.7
+    },
+    {
+     "quelle": "huelle",
+     "min": 0.5,
+     "max": 0.3,
+     "glatt": 2,
+     "lokal": true
+    }
+   ],
+   "cfg": {
+    "quelle": "huelle",
+    "min": 8.0,
+    "max": 11.0,
+    "glatt": 3,
+    "lokal": true
+   },
+   "glaettung": {
+    "quelle": "beat",
+    "min": 0.5,
+    "max": 0.1,
+    "release": 2
+   }
+  },
+  "takt_sample": {
+   "quelle": "beat",
+   "schwelle": 0.5
+  }
+ }
+}

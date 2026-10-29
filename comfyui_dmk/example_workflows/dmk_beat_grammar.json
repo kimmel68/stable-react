@@ -1,0 +1,460 @@
+{
+ "last_node_id": 10,
+ "last_link_id": 10,
+ "nodes": [
+  {
+   "id": 1,
+   "type": "LoadAudio",
+   "pos": [
+    40,
+    80
+   ],
+   "size": [
+    320,
+    200
+   ],
+   "flags": {},
+   "order": 0,
+   "mode": 0,
+   "inputs": [],
+   "outputs": [
+    {
+     "name": "AUDIO",
+     "type": "AUDIO",
+     "links": [
+      1
+     ]
+    }
+   ],
+   "properties": {
+    "Node name for S&R": "LoadAudio"
+   },
+   "widgets_values": [
+    "signal_decay_20s.m4a"
+   ]
+  },
+  {
+   "id": 2,
+   "type": "DMKAudioBeats",
+   "pos": [
+    380,
+    80
+   ],
+   "size": [
+    320,
+    200
+   ],
+   "flags": {},
+   "order": 1,
+   "mode": 0,
+   "inputs": [
+    {
+     "name": "audio",
+     "type": "AUDIO",
+     "link": 1
+    }
+   ],
+   "outputs": [
+    {
+     "name": "beats",
+     "type": "DMK_BEATS",
+     "links": [
+      2,
+      3,
+      8
+     ]
+    },
+    {
+     "name": "info",
+     "type": "STRING",
+     "links": [
+      10
+     ]
+    }
+   ],
+   "properties": {
+    "Node name for S&R": "DMKAudioBeats"
+   },
+   "widgets_values": [
+    30.0,
+    0,
+    0.0,
+    false,
+    60.0,
+    140.0
+   ]
+  },
+  {
+   "id": 3,
+   "type": "DMKBeatGrammar",
+   "pos": [
+    760,
+    80
+   ],
+   "size": [
+    320,
+    200
+   ],
+   "flags": {},
+   "order": 2,
+   "mode": 0,
+   "inputs": [
+    {
+     "name": "beats",
+     "type": "DMK_BEATS",
+     "link": 2
+    }
+   ],
+   "outputs": [
+    {
+     "name": "curves",
+     "type": "DMK_CURVES",
+     "links": [
+      4,
+      6
+     ]
+    },
+    {
+     "name": "summary",
+     "type": "STRING",
+     "links": []
+    }
+   ],
+   "properties": {
+    "Node name for S&R": "DMKBeatGrammar"
+   },
+   "widgets_values": [
+    "{\n \"zoom\": [\n  {\n   \"quelle\": \"beat\",\n   \"min\": 1.002,\n   \"max\": 1.008,\n   \"attack\": 3,\n   \"release\": 5\n  },\n  {\n   \"quelle\": \"count1\",\n   \"min\": 1.002,\n   \"max\": 1.016,\n   \"attack\": 3,\n   \"release\": 5\n  }\n ],\n \"denoise\": [\n  {\n   \"quelle\": \"onset\",\n   \"min\": 0.4,\n   \"max\": 0.52,\n   \"schwelle\": 0.3,\n   \"release\": 4\n  },\n  {\n   \"quelle\": \"count4\",\n   \"min\": 0.4,\n   \"max\": 0.62,\n   \"release\": 5\n  }\n ],\n \"blur\": {\n  \"quelle\": \"count2\",\n  \"min\": 0.0,\n  \"max\": 3.75,\n  \"release\": 1\n },\n \"source_pull\": {\n  \"quelle\": \"count3\",\n  \"min\": 0.05,\n  \"max\": 0.6,\n  \"release\": 3\n },\n \"memory\": {\n  \"quelle\": \"bar_phase\",\n  \"min\": 0.375,\n  \"max\": 0.85,\n  \"kurve\": 0.7\n },\n \"cfg\": {\n  \"quelle\": \"envelope\",\n  \"min\": 8.0,\n  \"max\": 11.0,\n  \"glatt\": 3,\n  \"lokal\": true\n }\n}"
+   ]
+  },
+  {
+   "id": 4,
+   "type": "DMKPlotCurves",
+   "pos": [
+    1180,
+    80
+   ],
+   "size": [
+    320,
+    200
+   ],
+   "flags": {},
+   "order": 3,
+   "mode": 0,
+   "inputs": [
+    {
+     "name": "beats",
+     "type": "DMK_BEATS",
+     "link": 3
+    },
+    {
+     "name": "curves",
+     "type": "DMK_CURVES",
+     "link": 4
+    }
+   ],
+   "outputs": [
+    {
+     "name": "IMAGE",
+     "type": "IMAGE",
+     "links": [
+      5
+     ]
+    }
+   ],
+   "properties": {
+    "Node name for S&R": "DMKPlotCurves"
+   },
+   "widgets_values": []
+  },
+  {
+   "id": 5,
+   "type": "PreviewImage",
+   "pos": [
+    1500,
+    80
+   ],
+   "size": [
+    320,
+    200
+   ],
+   "flags": {},
+   "order": 4,
+   "mode": 0,
+   "inputs": [
+    {
+     "name": "images",
+     "type": "IMAGE",
+     "link": 5
+    }
+   ],
+   "outputs": [],
+   "properties": {
+    "Node name for S&R": "PreviewImage"
+   },
+   "widgets_values": []
+  },
+  {
+   "id": 6,
+   "type": "DMKCurveSchedule",
+   "pos": [
+    1180,
+    420
+   ],
+   "size": [
+    320,
+    200
+   ],
+   "flags": {},
+   "order": 5,
+   "mode": 0,
+   "inputs": [
+    {
+     "name": "curves",
+     "type": "DMK_CURVES",
+     "link": 6
+    }
+   ],
+   "outputs": [
+    {
+     "name": "schedule",
+     "type": "STRING",
+     "links": [
+      7
+     ]
+    },
+    {
+     "name": "value_at_frame",
+     "type": "FLOAT",
+     "links": []
+    }
+   ],
+   "properties": {
+    "Node name for S&R": "DMKCurveSchedule"
+   },
+   "widgets_values": [
+    "zoom",
+    0,
+    4
+   ]
+  },
+  {
+   "id": 7,
+   "type": "PreviewAny",
+   "pos": [
+    1500,
+    420
+   ],
+   "size": [
+    320,
+    200
+   ],
+   "flags": {},
+   "order": 6,
+   "mode": 0,
+   "inputs": [
+    {
+     "name": "source",
+     "type": "*",
+     "link": 7
+    }
+   ],
+   "outputs": [],
+   "properties": {
+    "Node name for S&R": "PreviewAny"
+   },
+   "widgets_values": []
+  },
+  {
+   "id": 8,
+   "type": "DMKBarPrompts",
+   "pos": [
+    760,
+    520
+   ],
+   "size": [
+    320,
+    200
+   ],
+   "flags": {},
+   "order": 7,
+   "mode": 0,
+   "inputs": [
+    {
+     "name": "beats",
+     "type": "DMK_BEATS",
+     "link": 8
+    }
+   ],
+   "outputs": [
+    {
+     "name": "schedule",
+     "type": "STRING",
+     "links": [
+      9
+     ]
+    },
+    {
+     "name": "prompt_at_frame",
+     "type": "STRING",
+     "links": []
+    },
+    {
+     "name": "change_frames",
+     "type": "STRING",
+     "links": []
+    }
+   ],
+   "properties": {
+    "Node name for S&R": "DMKBarPrompts"
+   },
+   "widgets_values": [
+    "brutalist concrete cathedral, raw board-formed concrete, deep coffered ceiling\ncopperplate engraving of a vast basilica interior, cross-hatched arcades\ncathedral of fungal mycelium, hyphae ribbed vaults, soft bioluminescence",
+    2,
+    0
+   ]
+  },
+  {
+   "id": 9,
+   "type": "PreviewAny",
+   "pos": [
+    1180,
+    640
+   ],
+   "size": [
+    320,
+    200
+   ],
+   "flags": {},
+   "order": 8,
+   "mode": 0,
+   "inputs": [
+    {
+     "name": "source",
+     "type": "*",
+     "link": 9
+    }
+   ],
+   "outputs": [],
+   "properties": {
+    "Node name for S&R": "PreviewAny"
+   },
+   "widgets_values": []
+  },
+  {
+   "id": 10,
+   "type": "PreviewAny",
+   "pos": [
+    380,
+    420
+   ],
+   "size": [
+    320,
+    200
+   ],
+   "flags": {},
+   "order": 9,
+   "mode": 0,
+   "inputs": [
+    {
+     "name": "source",
+     "type": "*",
+     "link": 10
+    }
+   ],
+   "outputs": [],
+   "properties": {
+    "Node name for S&R": "PreviewAny"
+   },
+   "widgets_values": []
+  }
+ ],
+ "links": [
+  [
+   1,
+   1,
+   0,
+   2,
+   0,
+   "AUDIO"
+  ],
+  [
+   2,
+   2,
+   0,
+   3,
+   0,
+   "DMK_BEATS"
+  ],
+  [
+   3,
+   2,
+   0,
+   4,
+   0,
+   "DMK_BEATS"
+  ],
+  [
+   4,
+   3,
+   0,
+   4,
+   1,
+   "DMK_CURVES"
+  ],
+  [
+   5,
+   4,
+   0,
+   5,
+   0,
+   "IMAGE"
+  ],
+  [
+   6,
+   3,
+   0,
+   6,
+   0,
+   "DMK_CURVES"
+  ],
+  [
+   7,
+   6,
+   0,
+   7,
+   0,
+   "*"
+  ],
+  [
+   8,
+   2,
+   0,
+   8,
+   0,
+   "DMK_BEATS"
+  ],
+  [
+   9,
+   8,
+   0,
+   9,
+   0,
+   "*"
+  ],
+  [
+   10,
+   2,
+   1,
+   10,
+   0,
+   "*"
+  ]
+ ],
+ "groups": [],
+ "config": {},
+ "extra": {
+  "info": "dmk beat grammar: audio → 4/4 beats on the transient → parameter curves, keyframe schedules and world (prompt) changes on the bar. Put signal_decay_20s.m4a into ComfyUI/input."
+ },
+ "version": 0.4
+}

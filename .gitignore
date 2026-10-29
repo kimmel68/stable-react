@@ -1,0 +1,17 @@
+# Laufzeit und Umgebung
+.venv/
+.uv-cache/
+__pycache__/
+*.pyc
+# eigener ComfyUI-Checkout (eigenes Repo, Version steht in ZWISCHENSTAND.md)
+ComfyUI/
+# Ergebnisse und Quellmaterial (groß; Referenz ref_bond ist fremdes Material)
+out/
+seq/
+# fremde Werkzeuge für Vergleichstests (DVD-Tiefe), nicht Teil von dmk
+extern/
+# lokale Schlüssel/Einstellungen
+.env
+*.log
+*.err
+*.FERTIG
