@@ -1,4 +1,4 @@
-"""dmk App: audioreaktive Deforum-Bildwelten aus Bild, Video oder Blender-Pässen.
+"""dmk App: audioreaktive Deforum-Bildwelten aus Bild, Video oder 3D-Pässen.
 
 Zwei Apps, ein Code (Nutzer 27.10.: "2 Anwendungen, selbe Einstellungsmöglichkeiten"):
   app.bat        dmk · SD 1.5      (http://127.0.0.1:7860) – nur offene Gewichte
@@ -94,6 +94,12 @@ WELTEN = json.loads((CFG / "welten.json").read_text(encoding="utf-8"))
 # unterscheidbaren Welten; die Auswahl füllt das Welten-Feld, das man frei ändern kann
 WELTENSETS = json.loads((CFG / "weltensets.json").read_text(encoding="utf-8"))
 STANDARD_SET = "Coast"
+WELTEN_MAX = 10   # Nutzer 29.10.: ein Prompt-Feld je Welt, weitere per "+ Add world", die Welten rotieren
+
+
+def welten_aus_feldern(n, felder) -> str:
+    """Die sichtbaren, nicht leeren Prompt-Felder als Weltenliste (eine Welt je Zeile, in dieser Reihenfolge)."""
+    return "\n".join(" ".join(str(t).split()) for t in list(felder)[:int(n or 0)] if t and str(t).strip())
 MODELLE = [
     ("SD 1.5 DreamShaper 8", "image model", "CreativeML OpenRAIL-M", "open"),
     ("ControlNet v1.1 depth (control_v11f1p_sd15_depth)", "keeps the room", "CreativeML OpenRAIL-M", "open"),
@@ -107,7 +113,7 @@ MODELLE_FLUX = [
 FLUX_KEYS = list(hybrid.KEYS)          # Every beat / Every bar / World change only
 SD_S_PRO_FRAME = {512: 1.0, 640: 1.5, 768: 2.15}   # RTX 3070 Ti, Cadence 3; 768: gemessen 27.10. (2,1–2,3 s/Frame)
 
-BASIS = {   # Kern der Produktionseinstellung (Lille), ohne Lille-spezifische Maske, IDs und Prompt
+BASIS = {   # Kern der Produktionseinstellung, ohne projektspezifische Maske, IDs und Prompt
     "zoom": "0:(1.0)", "stride": 1, "controlnet": "depth", "control_strength": 1.0, "hf": 0.0, "alpha": 0.1,
     "denoise": 0.4, "first_denoise": 0.75, "seed_mode": "iter", "color_match": "gen0", "cadence": 3, "licht": 0.8,
     "wandel": "none", "cfg": 9.0, "antiblur": 0.25, "noise": 0.0, "control_end": 1.0, "quellzoom": "0:(1.003)",
@@ -351,7 +357,7 @@ def lauf_params(quelle_art, bild, video, ordner, track, rezept, welt, eigener_pr
         n = min(n, len(core.list_images(fr)))
     else:
         if not ordner or not Path(ordner).is_dir():
-            raise gr.Error("Please enter a folder with Blender passes (beauty/, depth/, exr/ …).")
+            raise gr.Error("Please enter a folder with 3D passes (beauty/ and depth/, optional exr/).")
         quelle = ordner
         exr = (Path(ordner) / "exr").is_dir()
         p["motion"] = "vektor" if exr else "kamera"
@@ -395,7 +401,7 @@ def ausfuehren(p: dict, quelle, n: int, job: Path, engine: str = "sd15", flux_ke
     seq = quelle
     if engine == "flux":
         if p.get("motion") == "vektor" or (Path(str(quelle)).is_dir() and (Path(str(quelle)) / "beauty").is_dir()):
-            raise ValueError("The Flux Hybrid works with an image or a video, not with Blender passes.")
+            raise ValueError("The Flux Hybrid works with an image or a video, not with 3D passes.")
         pl = hybrid.plan(p, n, flux_keys, job / "flux")
         if Path(str(quelle)).is_file():   # Standbild: Flux zeichnet auf jedem Weltwechsel den aktuellen Blick der Fahrt um
             log(f"[flux] still image: world changes on frames {pl['wechsel']} are drawn over the current view")
@@ -527,7 +533,7 @@ def rendern(quelle_art, bild, video, ordner, beat_quelle, track, bpm, klick_beha
         gr.Warning("ComfyUI is busy with jobs from another program – this render starts when they are done.")
     if not _lebt(f"{PROXY}/api/v2/jobs") or not _lebt(f"http://{COMFY}/system_stats"):
         raise gr.Error("ComfyUI or comfy-api-proxy is not running – press 'Start services' first.")
-    if ENGINE == "flux" and quelle_art == "Blender passes":
+    if ENGINE == "flux" and quelle_art == "3D passes":
         raise gr.Error("The Flux Hybrid works with an image or a video.")
     stamp = time.strftime("%Y%m%d_%H%M%S")
     job = OUT / f"{stamp}_{ENGINE}_{str(weltenset or 'own').split()[0].lower()}"
@@ -602,7 +608,7 @@ KOPF = {
 def baue() -> gr.Blocks:
     titel, kopf = KOPF[ENGINE]
     flux = ENGINE == "flux"
-    quellen = ["Image", "Video"] if flux else ["Image", "Video", "Blender passes"]
+    quellen = ["Image", "Video"] if flux else ["Image", "Video", "3D passes"]
     with gr.Blocks(title=titel) as ui:
         gr.Markdown(kopf)
         with gr.Row():
@@ -615,7 +621,10 @@ def baue() -> gr.Blocks:
                 tiefe_bild = gr.Image(type="filepath", label="Depth map (optional – your own, white = near; "
                                                              "otherwise Depth Anything V2 estimates it)", height=160)
                 video = gr.Video(label="Video (drone footage works great)", visible=False)
-                ordner = gr.Textbox(label="Folder with Blender passes (beauty/, depth/, exr/, ids/)", visible=False)
+                ordner = gr.Textbox(label="Folder with 3D passes from any 3D tool: beauty/ and depth/ as numbered "
+                                          "PNG frames (depth: white = near, 8 or 16 bit); optional exr/ with Blender "
+                                          "multilayer EXR (Depth, Vector, Object Index) for exact motion – without it "
+                                          "the motion is measured from the beauty frames", visible=False)
                 beat_quelle = gr.Radio(BEAT_QUELLEN, value="Track", label="Beat source")
                 track = gr.Audio(type="filepath", label="Track (any audio file – the beats and the bar are detected)")
                 with gr.Row():
@@ -628,9 +637,19 @@ def baue() -> gr.Blocks:
             with gr.Column(scale=1):
                 with gr.Accordion("Worlds", open=True):
                     weltenset = gr.Dropdown(list(WELTENSETS) + ["Own"], value=STANDARD_SET,
-                                            label="World set (fills the list below – edit it freely)")
-                    welten_text = gr.Textbox(value="\n".join(WELTENSETS[STANDARD_SET]), lines=4,
-                                             label="Worlds – one prompt per line, the first one is the start world")
+                                            label="World set (fills the worlds below – edit them freely)")
+                    start_welten = WELTENSETS[STANDARD_SET]
+                    welt_felder = [gr.Textbox(value=start_welten[k] if k < len(start_welten) else "", lines=1,
+                                              max_lines=3, visible=k < len(start_welten),
+                                              label=f"World {k + 1}" + (" – start world" if k == 0 else ""),
+                                              placeholder="e.g. aerial photograph of the same valley covered in snow")
+                                   for k in range(WELTEN_MAX)]
+                    welten_n = gr.State(len(start_welten))
+                    with gr.Row():
+                        welt_plus = gr.Button("+ Add world", size="sm")
+                        welt_minus = gr.Button("− Remove last", size="sm")
+                    gr.Markdown("On every world change the next world follows; after the last one it starts again "
+                                "with world 1.")
                     wechsel = gr.Dropdown(list(WECHSEL), value="Every 2 bars", label="World change on count 1")
                 with gr.Accordion("Camera", open=True):
                     modus = gr.Radio(MODI, value=MODI[0], label="Mode (rigid frame = no camera move)")
@@ -689,14 +708,31 @@ def baue() -> gr.Blocks:
 
         def quelle_wechsel(art):   # Bild: die Kamera gleitet; Video: das Video bewegt sich selbst, nur Zoom-Pulse
             return (gr.update(visible=art == "Image"), gr.update(visible=art == "Video"),
-                    gr.update(visible=art == "Blender passes"), gr.update(value=2 if art == "Image" else 0),
+                    gr.update(visible=art == "3D passes"), gr.update(value=2 if art == "Image" else 0),
                     gr.update(visible=art == "Image"))
         quelle_art.change(quelle_wechsel, quelle_art, [bild, video, ordner, tempo, tiefe_bild])
         beat_quelle.change(lambda q: (gr.update(visible=q == "Track"), gr.update(visible=q == "BPM only"),
                                       gr.update(visible=q == "BPM only"), gr.update(visible=q == "Track")),
                            beat_quelle, [track, bpm, klick_behalten, track_start])
-        weltenset.change(lambda s: gr.update(value="\n".join(WELTENSETS[s])) if s in WELTENSETS else gr.update(),
-                         weltenset, welten_text)
+        def set_waehlen(s):   # ein Set füllt die Felder, "Own" lässt sie stehen
+            if s not in WELTENSETS:
+                return [gr.update()] * (WELTEN_MAX + 1)
+            w = WELTENSETS[s][:WELTEN_MAX]
+            return [len(w)] + [gr.update(value=w[k] if k < len(w) else "", visible=k < len(w))
+                               for k in range(WELTEN_MAX)]
+
+        def welt_dazu(n):
+            n = min(WELTEN_MAX, int(n) + 1)
+            return [n] + [gr.update(visible=k < n) for k in range(WELTEN_MAX)]
+
+        def welt_weg(n):
+            n = max(1, int(n) - 1)
+            return [n] + [gr.update(visible=k < n) if k < n else gr.update(visible=False, value="")
+                          for k in range(WELTEN_MAX)]
+
+        weltenset.change(set_waehlen, weltenset, [welten_n] + welt_felder)
+        welt_plus.click(welt_dazu, welten_n, [welten_n] + welt_felder)
+        welt_minus.click(welt_weg, welten_n, [welten_n] + welt_felder)
         pfad.change(lambda p: (gr.update(visible=p == "Direction"), gr.update(visible=p == "Direction")), pfad,
                     [richtung, drift])
         zeit_ein = [sekunden, aufloesung, flux_keys, bpm, quelle_art]
@@ -706,10 +742,17 @@ def baue() -> gr.Blocks:
         kurven_btn.click(kurven_ansehen, [beat_quelle, track, bpm, rezept, sekunden, zoom_staerke, track_start,
                                           ak1, ak2, ak3, ak4], [merkmale_img, kurven_img, kurven_text])
         stopp_btn.click(lambda: STOPP.set(), None, None)
-        render_btn.click(rendern, [quelle_art, bild, video, ordner, beat_quelle, track, bpm, klick_behalten, sekunden,
-                                   track_start, weltenset, welten_text, wechsel, modus, tempo, pfad, richtung, drift,
-                                   flux_keys, mono, palette, film, aufloesung, rezept, ak1, ak2, ak3, ak4, raster,
-                                   versatz_ms, zoom_staerke, zentrum_y, maske, tiefe_bild], [ergebnis, kontakt, log])
+        def rendern_ui(*a, progress=gr.Progress()):   # Welten-Felder -> Weltenliste (an Position von welten_text)
+            a = list(a)
+            felder, a = a[-WELTEN_MAX:], a[:-WELTEN_MAX]
+            a[11] = welten_aus_feldern(a[11], felder)
+            yield from rendern(*a, progress=progress)
+
+        render_btn.click(rendern_ui, [quelle_art, bild, video, ordner, beat_quelle, track, bpm, klick_behalten, sekunden,
+                                      track_start, weltenset, welten_n, wechsel, modus, tempo, pfad, richtung, drift,
+                                      flux_keys, mono, palette, film, aufloesung, rezept, ak1, ak2, ak3, ak4, raster,
+                                      versatz_ms, zoom_staerke, zentrum_y, maske, tiefe_bild] + welt_felder,
+                         [ergebnis, kontakt, log])
     return ui
 
 

@@ -126,7 +126,7 @@ class PassSequenz:
         self.exr = self._nummern(self.root / "exr", (".exr",))
         self.png = {d.name: self._nummern(d, (".png", ".tif", ".tiff", ".jpg"))
                     for d in self.root.iterdir() if d.is_dir() and d.name != "exr"}
-        # meta.json aus dem Blender-Prompt: normalisation.depth_near_m / depth_far_m (Lille: 113.04 / 819.04)
+        # meta.json aus dem Blender-Prompt: normalisation.depth_near_m / depth_far_m
         norm = self.meta.get("normalisation") or {}
         z = self.meta.get("tiefe") or self.meta.get("depth") or {}
         self.z_nah = float(norm.get("depth_near_m", z.get("nah", z.get("near", 0.1))))

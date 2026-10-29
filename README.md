@@ -1,9 +1,23 @@
-# Stable React — the music is a grammar, not a volume meter
+<div align="center">
 
-**Stable React** (code name `dmk`) turns a photo or a video plus a music track (or just a BPM) into a Deforum-style journey that **glides through
-the picture without a single cut** and **plays the bar**: every count of a 4/4 bar does something different, and on
-count 1 the whole world changes — coast → arctic → lava → marble — while space, shapes and the flow of motion stay
-intact. Everything runs locally through ComfyUI and the **Comfy SDK**.
+# STABLE REACT
+
+**The music is a grammar, not a volume meter.**
+
+<img src="docs/media/hero.webp" width="100%" alt="Stable React example: one uncut glide through a hall, the world changes on count 1 of every bar">
+
+![license](https://img.shields.io/badge/code-MIT-black) ![nodes](https://img.shields.io/badge/node%20pack-GPL--3.0-black)
+![comfyui](https://img.shields.io/badge/ComfyUI-0.39.1-black) ![vram](https://img.shields.io/badge/VRAM-8%20GB-black)
+![weights](https://img.shields.io/badge/models-open%20weights-black) ![flux](https://img.shields.io/badge/built%20with-FLUX.1%20Kontext-black)
+
+[Demo video](#demo) · [Quick start](#quick-start) · [Using the apps](#using-the-apps) · [Node pack](#the-node-pack-comfyui_dmk-gpl-30) · [How it works](#how-it-works)
+
+</div>
+
+**Stable React** (code name `dmk`) turns a photo or a video plus a music track (or just a BPM) into a Deforum-style
+journey that **glides through the picture without a single cut** and **plays the bar**: every count of a 4/4 bar does
+something different, and on count 1 the whole world changes — coast → arctic → lava → marble — while space, shapes and
+the flow of motion stay intact. Everything runs locally on an 8 GB GPU through ComfyUI and the **Comfy SDK**.
 
 Two apps, one code base, the same settings:
 
@@ -12,7 +26,26 @@ Two apps, one code base, the same settings:
 | **Stable React · SD 1.5** | `app.bat` → http://127.0.0.1:7860 | Stable Diffusion 1.5 in a depth-guided feedback loop | Open weights only |
 | **Stable React · Flux Hybrid** | `app_flux.bat` → http://127.0.0.1:7861 | **FLUX.1 Kontext [dev]** redraws the footage on the beat, the SD 1.5 loop makes it flow | Built with FLUX |
 
-> Demo video (≤ 2 min): *link follows*
+## Demo
+
+- **Demo video (≤ 2 min):** *link follows*
+- **App walkthrough** (both apps, real settings, honest render times): [`docs/media/app_walkthrough.mp4`](docs/media/app_walkthrough.mp4)
+- **Example results with sound**, made only from the material in `examples/`:
+  [SD 1.5 · hall + track](docs/media/example_sd15_hall.mp4) ·
+  [Flux Hybrid · hangar + 128 BPM](docs/media/example_flux_hangar.mp4)
+
+## Quick start
+
+```bash
+git clone https://github.com/kimmel68/stable-react.git
+cd stable-react
+powershell -ExecutionPolicy Bypass -File install.ps1
+app.bat
+```
+
+Then open http://127.0.0.1:7860, press **Start services**, drop in `examples/hall.png` and
+`examples/signal_decay_20s.m4a` and press **Render**. For the Flux Hybrid: `install.ps1 -Flux`, then `app_flux.bat`.
+Details in [Setup](#setup-windows-nvidia-gpu-with-8-gb).
 
 ## What is new
 
@@ -60,11 +93,12 @@ Flux keyframe workflow (core nodes only): `deforum_mosh/dmk/workflows/flux_konte
 ## Using the apps
 
 1. **Start services** (launches ComfyUI and the Comfy API proxy; the status line checks versions and models).
-2. **Source:** an image or a video (drone footage and landscapes work best; the SD app also takes Blender passes).
+2. **Source:** an image or a video (drone footage and landscapes work best; the SD app also takes 3D passes: numbered beauty and depth PNG frames from any 3D tool, optionally Blender multilayer EXR with the vector pass).
 3. **Beat source:** *Track* (any audio file, choose the start second) or *BPM only*.
-4. **Worlds:** pick a world set (Coast, Mountain lake, Forest seasons, North sea, Desert, Clouds, Fields,
-   Architecture, Architecture II) — it fills an editable list, one prompt per line — and how often the world changes
-   on count 1.
+4. **Worlds:** pick a world set (18 sets, from Coast, Mountain lake and Salt lakes to Brutalism and Architecture) — it
+   fills one prompt field per world. Edit any field, add worlds with **+ Add world** (up to 10) or drop the last one;
+   on every world change the next world follows, after the last one it starts again with world 1. Choose how often
+   the world changes on count 1.
 5. **Render.** *Preview curves* shows how the music maps onto every parameter before you spend GPU time.
 
 | Setting | Default | Notes |
@@ -112,11 +146,11 @@ the same code path.
 
 | Model | Role | License |
 |---|---|---|
-| Stable Diffusion 1.5 — DreamShaper 8 | image model | CreativeML OpenRAIL-M |
-| ControlNet v1.1 depth (`control_v11f1p_sd15_depth`) | keeps the space | CreativeML OpenRAIL-M |
-| Depth-Anything-V2-Small | depth for photos, video and anchors | Apache-2.0 |
-| RAFT (torchvision) | optical flow for video | BSD-3-Clause |
-| FLUX.1 Kontext [dev] fp8 (Comfy-Org), T5-XXL fp8, CLIP-L, Flux VAE | Flux Hybrid only | **FLUX.1 [dev] Non-Commercial License** (Kontext, VAE); Apache-2.0 / MIT (encoders) |
+| Stable Diffusion 1.5 — [DreamShaper 8](https://huggingface.co/Lykon/DreamShaper) | image model | CreativeML OpenRAIL-M |
+| [ControlNet v1.1 depth](https://huggingface.co/comfyanonymous/ControlNet-v1-1_fp16_safetensors) (`control_v11f1p_sd15_depth`) | keeps the space | CreativeML OpenRAIL-M |
+| [Depth-Anything-V2-Small](https://huggingface.co/depth-anything/Depth-Anything-V2-Small-hf) | depth for photos, video and anchors | Apache-2.0 |
+| RAFT ([torchvision](https://pytorch.org/vision/stable/models/raft.html)) | optical flow for video | BSD-3-Clause |
+| [FLUX.1 Kontext [dev] fp8](https://huggingface.co/Comfy-Org/flux1-kontext-dev_ComfyUI) (Comfy-Org), [T5-XXL fp8, CLIP-L](https://huggingface.co/comfyanonymous/flux_text_encoders), Flux VAE | Flux Hybrid only | **[FLUX.1 [dev] Non-Commercial License](https://huggingface.co/black-forest-labs/FLUX.1-Kontext-dev/blob/main/LICENSE.md)** (Kontext, VAE); Apache-2.0 / MIT (encoders) |
 
 ComfyUI core nodes plus the dmk node pack; no partner nodes, no closed APIs. Model weights are not part of this
 repository and keep their own licenses (including the CreativeML OpenRAIL-M use restrictions). The SD 1.5 app does
@@ -127,7 +161,7 @@ not depend on any Flux weight. Read the FLUX.1 [dev] license before you use Flux
 ```
 track or BPM ──► beats on the onset, bar counts 1–4, features ──► bindings ──► per-frame parameters + world schedule
                                                                                      │
-source (image | video | passes) ──► motion (virtual camera + path | RAFT + depth | Blender vectors)
+source (image | video | passes) ──► motion (virtual camera + path | RAFT + depth | 3D pass vectors)
    │                                                                                 │
    └─ Flux Hybrid only: FLUX.1 Kontext keyframes on the beat ──► carried along the video flow ──► new source
                                                                                      │
@@ -145,9 +179,10 @@ Driver: `deforum_mosh/dmk/method_a.py`; audio: `audio.py`; Flux stage: `hybrid.p
 |---|---|
 | `app/` | Gradio app (both engines) |
 | `comfyui_dmk/` | ComfyUI node pack, GPL-3.0 |
-| `deforum_mosh/dmk/` | driver, audio analysis, Flux stage, motion, metrics, Blender pass reader, research scripts |
+| `deforum_mosh/dmk/` | driver, audio analysis, Flux stage, motion, metrics, 3D pass reader, research scripts |
 | `configs/` | beat recipes (`recipe_*.json`), world sets (`weltensets.json`), worlds (`welten.json`) |
-| `examples/` | neutral example material (generated with the open model from a procedural corridor) |
+| `examples/` | neutral example material (generated with the open model from a procedural corridor) and an example track by the author |
+| `docs/media/` | README title animation, app walkthrough and example results |
 | `tests/` | smoke tests (no GPU), node tests |
 | `docs/` | German working notes: measurements, night runs, decisions |
 
@@ -157,3 +192,16 @@ Code: MIT, © 2026 Kimmel (see `LICENSE`), except `comfyui_dmk/`, which is GPL-3
 Music in the examples and the demo: by the author. Drone footage in the demo video: [Pexels](https://www.pexels.com)
 (Pexels license; sources listed in the video description) — not part of this repository. Architecture in the demo:
 the author's own Unreal Engine renders.
+
+Built on [ComfyUI](https://github.com/comfyanonymous/ComfyUI) and the
+[Comfy SDK](https://docs.comfy.org/development/api-development/sdks) for the ComfyUI **Open Source Higgsfield**
+challenge · #OpenSourceHiggsfield
+
+<div align="center">
+<br>
+
+*from kimmel — i love what i do. best wishes*
+
+Light × Architecture × AI-driven spatial futures · [Instagram](https://www.instagram.com/kimmel_philipp/)
+
+</div>

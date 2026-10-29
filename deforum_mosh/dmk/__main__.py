@@ -37,7 +37,7 @@ def _args_a(p):
     p.add_argument("--depth-invert", action="store_true", help="Tiefenkarten: dunkel = nah")
     p.add_argument("--hf", type=float, default=0.0, help="Hochfrequenzen der Quelle zurückspeisen (0.5–1.0)")
     p.add_argument("--hf-sigma", type=float, default=2.0)
-    p.add_argument("--hf-mode", default="replace", choices=["replace", "add"], help="add = akkumulierende Streifen (Lille-v1-Look)")
+    p.add_argument("--hf-mode", default="replace", choices=["replace", "add"], help="add = akkumulierende Streifen (Streifen-Look)")
     p.add_argument("--stride", type=int, default=1, help="nur jeden n-ten Quellframe (mehr Bewegung pro Frame)")
     p.add_argument("--wrap", action="store_true", help="Loop-Sequenz zyklisch durchlaufen (mit --stride und --count)")
     p.add_argument("--motion", default="zoom", choices=["zoom", "flow", "kamera", "vektor", "virtuell"],

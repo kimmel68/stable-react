@@ -9,7 +9,7 @@ Ein Track wird per ffmpeg dekodiert und in Merkmale pro VIDEO-Frame zerlegt (all
   flach    spektrale Flachheit (Rauschanteil)
 
 Zeitbasis: Frame i der Ausgabe ist Quellframe start + i·stride; dessen Zeit im Track ist
-offset + (start + i·stride) / basis_fps  (Lille: Frame 1 = 0 s bei 30 fps). Das Video darf eine andere
+offset + (start + i·stride) / basis_fps  (z. B. Frame 1 = 0 s bei 30 fps). Das Video darf eine andere
 Bildrate haben; `ton_anlegen` zieht den Tonausschnitt dann per atempo auf die Videolänge.
 
 Bindung (JSON, Schlüssel "audio" in den Parametern):

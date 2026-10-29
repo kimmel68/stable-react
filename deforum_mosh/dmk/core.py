@@ -327,7 +327,7 @@ def hf_inject(base, src, k: float, sigma: float = 2.0, mode: str = "replace"):
 
     mode="replace": Hochband des Bildes wird zu k durch das der Quelle ersetzt; beschränkt, Schärfe ≈ Quelle.
     mode="add":     Hochband wird addiert und schaukelt sich im Feedback-Loop auf (det_ratio 8+): Streifen
-                    entlang der Bewegung, der "Lille-v1-Look". Bewusst wählbar, nicht Standard."""
+                    entlang der Bewegung, der "Streifen-Look". Bewusst wählbar, nicht Standard."""
     if k <= 0:
         return base
     b = base.astype(np.float32)

@@ -83,7 +83,7 @@ def raum_tiefe(out_frames, src_depth, cache_dir, sub: int = 1, step: int = 4, si
     """Räumlichkeit: Pearson-Korrelation der geschätzten Tiefe des Ergebnisses mit der Tiefe der Quelle,
     über jeden step-ten Frame. 1.0 = gleiche Raumstruktur, ~0 = Raum verloren. Skaleninvariant, und
     anders als ein Kantenvergleich unempfindlich gegen neue Textur.
-    mask: Bild/Array (weiß = gültig) – nur dort vergleichen. Bei maskiertem Material (Lille: Blende außen
+    mask: Bild/Array (weiß = gültig) – nur dort vergleichen. Bei maskiertem Material (z. B. Blende außen
     schwarz, in der Blender-Tiefe aber als nahe Ebene) verfälscht der Außenbereich sonst die Korrelation."""
     out_frames = list(out_frames)
     idx = list(range(0, len(out_frames), step))
