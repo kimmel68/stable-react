@@ -28,7 +28,7 @@ Two apps, one code base, the same settings:
 
 ## Demo
 
-- **Demo video (≤ 2 min):** *link follows*
+- **Demo video (1:28):** [youtu.be/5PstncBSvjc](https://youtu.be/5PstncBSvjc)
 - **App walkthrough** (both apps, real settings, honest render times): [`docs/media/app_walkthrough.mp4`](docs/media/app_walkthrough.mp4)
 - **Example results with sound**, made only from the material in `examples/`:
   [SD 1.5 · hall + track](docs/media/example_sd15_hall.mp4) ·
