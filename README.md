@@ -33,6 +33,8 @@ Two apps, one code base, the same settings:
 - **Example results with sound**, made only from the material in `examples/`:
   [SD 1.5 · hall + track](docs/media/example_sd15_hall.mp4) ·
   [Flux Hybrid · hangar + 128 BPM](docs/media/example_flux_hangar.mp4)
+- **3D passes from Blender** (beauty | depth | result, exact motion from the EXR vector pass):
+  [voxel valley](docs/media/example_3d_passes_voxel_valley.mp4), scene script `examples/blender/voxel_valley.py`
 
 ## Quick start
 
@@ -112,6 +114,19 @@ Flux keyframe workflow (core nodes only): `deforum_mosh/dmk/workflows/flux_konte
 | Look | film colour, film finish 1.0, palette auto | black and white; palette from the footage or per world |
 | Resolution | 512 | 640 / 768 (showcase clips: 768) |
 | Advanced | | beat recipe, strength of counts 1–4, snap to a fixed grid, picture delay (e.g. Bluetooth), zoom pulse strength, vanishing point, mask |
+
+### 3D passes from Blender (or any 3D tool)
+
+The SD app takes a rendered sequence as source: `beauty/` (numbered frames) and `depth/` (numbered 8/16-bit PNG,
+white = near) are enough; optional `exr/` holds Blender multilayer EXR with Depth, Vector and Object Index, so the loop
+moves with the exact 3D motion instead of measured optical flow, and `meta.json` fixes the depth range. The example
+scene renders all of it in about four minutes on an 8 GB GPU:
+
+```bash
+blender -b -P examples/blender/voxel_valley.py -- passes/voxel_valley
+```
+
+Then choose *3D passes* in the app and enter the folder `passes/voxel_valley`.
 
 ## Hardware and time
 
