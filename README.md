@@ -34,7 +34,7 @@ Two apps, one code base, the same settings:
   [SD 1.5 · hall + track](docs/media/example_sd15_hall.mp4) ·
   [Flux Hybrid · hangar + 128 BPM](docs/media/example_flux_hangar.mp4)
 - **3D passes from Blender** (beauty | depth | result, exact motion from the EXR vector pass):
-  [voxel valley](docs/media/example_3d_passes_voxel_valley.mp4), scene script `examples/blender/voxel_valley.py`
+  [voxel board city](docs/media/example_3d_passes_voxel_city.mp4), scene script `examples/blender/voxel_city.py`
 
 ## Quick start
 
@@ -119,14 +119,25 @@ Flux keyframe workflow (core nodes only): `deforum_mosh/dmk/workflows/flux_konte
 
 The SD app takes a rendered sequence as source: `beauty/` (numbered frames) and `depth/` (numbered 8/16-bit PNG,
 white = near) are enough; optional `exr/` holds Blender multilayer EXR with Depth, Vector and Object Index, so the loop
-moves with the exact 3D motion instead of measured optical flow, and `meta.json` fixes the depth range. The example
-scene renders all of it in about four minutes on an 8 GB GPU:
+moves with the exact 3D motion instead of measured optical flow, and `meta.json` fixes the depth range.
+
+The example scene is a drone flight over a voxel city that rebuilds itself on every count 1 of the example track
+(blocks jump on counts 2–4, streets and windows flash on every beat), so every world change has real 3D motion behind
+it. It renders beauty, depth and EXR in about eight minutes on an 8 GB GPU (Blender 5.x):
 
 ```bash
-blender -b -P examples/blender/voxel_valley.py -- passes/voxel_valley
+blender -b -P examples/blender/voxel_city.py -- passes/voxel_city
 ```
 
-Then choose *3D passes* in the app and enter the folder `passes/voxel_valley`.
+Then choose *3D passes* in the app, enter the folder `passes/voxel_city`, load `examples/signal_decay_20s.m4a`, set
+*World change on count 1* to *Every bar*, *Colour palette* to *Per world* and use worlds like these:
+
+1. `aerial macro photograph of a deep blue printed circuit board, the blocks are black microchips and components, glowing gold copper traces, backlit`
+2. `aerial photograph of the same blocks as a dark cyberpunk megacity at night, neon magenta and cyan lights, rain-wet streets, smog`
+3. `aerial macro photograph of the same blocks as chips on a bright green circuit board, gold traces, clean studio daylight`
+4. `aerial photograph of the same blocks as a dystopian megacity in thick orange smog at dusk, sodium street lights, searchlights, haze`
+
+Scenes from your own 3D tool should be rendered at 30 fps: the app reads source frame *i* as output frame *i*.
 
 ## Hardware and time
 

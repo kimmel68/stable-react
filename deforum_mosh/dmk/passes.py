@@ -72,7 +72,8 @@ def finde_kanal(kanaele: dict[str, np.ndarray], *muster: str) -> np.ndarray | No
 
 
 def tiefe_aus_exr(kanaele: dict[str, np.ndarray]) -> np.ndarray | None:
-    z = finde_kanal(kanaele, r"^Depth\.Z$", r"Depth\.Z", r"\.Z$", r"^Z$")
+    # Render-Ausgabe schreibt 'Depth.Z', der File-Output-Node von Blender 5 'Depth.V'; nie auf Vector.Z ausweichen
+    z = finde_kanal(kanaele, r"^Depth\.[ZV]$", r"Depth\.[ZV]$", r"^Z$")
     if z is None:
         return None
     z = z.copy()
@@ -230,7 +231,9 @@ class PassSequenz:
         k = self.exr_frame(nr, ["Object Index"])
         if not k:
             return None
-        ids = next(iter(k.values()))
+        ids = finde_kanal(k, r"Object Index\.[VX]$", r"IndexOB")      # nicht blind den ersten Kanal (einteilige EXR)
+        if ids is None:
+            return None
         if size is not None:
             ids = cv2.resize(ids, size, interpolation=cv2.INTER_NEAREST)
         return ids
